@@ -29,8 +29,8 @@ jobs:
       - name: Docker pull and push
         run: |
           docker pull nginx:1.27.4
-          docker tag  nginx:1.27.4 ghcr.io/just-do1/sig-storage/nginx:1.27.4
-          docker push ghcr.io/just-do1/sig-storage/nginx:1.27.4
+          docker tag  nginx:1.27.4 ghcr.io/stark/sig-storage/nginx:1.27.4
+          docker push ghcr.io/stark/sig-storage/nginx:1.27.4
 
       # - name: download
       #   run: |
