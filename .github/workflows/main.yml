@@ -1,63 +1,37 @@
-# This is a basic workflow to help you get started with Actions
+name: Sync-Docker-Image-To-GHCR
 
-name: GItGoogleContainer
-
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  SOURCE_IMAGE: n8nio/n8n:1.113.0
+  TARGET_NAMESPACE: just-do1
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  sync:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      # - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Login in Docker Registry
+      - name: Login to GHCR
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Docker pull and push
+
+      - name: Sync Docker Image
         run: |
-          echo "abc"
-          docker pull codercom/enterprise-base:ubuntu
+          set -e
 
-          docker tag codercom/enterprise-base:ubuntu ghcr.io/just-do1/codercom/enterprise-base:ubuntu
+          echo "Source image: ${SOURCE_IMAGE}"
 
-          docker push ghcr.io/just-do1/codercom/enterprise-base:ubuntu
-          
-          # docker pull bitnami/postgresql:latest
-          # docker pull bitnami/os-shell:latest
-          # docker pull bitnami/postgres-exporter:latest
-          
-          # docker tag bitnami/postgresql:latest ghcr.io/just-do1/bitnami/postgresql:latest
-          # docker tag bitnami/os-shell:latest ghcr.io/just-do1/bitnami/os-shell:latest
-          # docker tag bitnami/postgres-exporter:latest ghcr.io/just-do1/bitnami/postgres-exporter:latest
+          IMAGE_NAME=$(echo "${SOURCE_IMAGE}" | cut -d':' -f1)
+          IMAGE_TAG=$(echo "${SOURCE_IMAGE}" | cut -d':' -f2)
 
-          # docker push ghcr.io/just-do1/bitnami/postgresql:latest
-          # docker push ghcr.io/just-do1/bitnami/os-shell:latest
-          # docker push ghcr.io/just-do1/bitnami/postgres-exporter:latest
+          TARGET_IMAGE=ghcr.io/${TARGET_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
 
-      # - name: download
-      #   run: |
-      #     wget https://ppc.land/content/files/2025/01/Newwhitepaper_Agents2.pdf
-      # - name: Upload GitHub Pages artifact
-      #   uses: actions/upload-pages-artifact@v3.0.1
-      #   with:
-      #     # Artifact name
-      #     name: Newwhitepaper_Agents2.pdf
-      #     # Path of the directory containing the static assets.
-      #     path: ./
-      #     # Duration after which artifact will expire in days.
-      #     retention-days: 1
-          
-          
+          docker pull ${SOURCE_IMAGE}
+          docker tag ${SOURCE_IMAGE} ${TARGET_IMAGE}
+          docker push ${TARGET_IMAGE}
+
+          echo "Sync finished: ${TARGET_IMAGE}"
