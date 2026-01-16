@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: redis
-      IMAGE_VERSION: 7.2
+      IMAGE_NAME: n8nio/n8n
+      IMAGE_VERSION: 1.113.0
 
     steps:
     - name: Checkout repository
