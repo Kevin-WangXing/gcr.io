@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: mysql
-      IMAGE_VERSION: 8.3.0
+      IMAGE_NAME: cooderl/wewe-rss
+      IMAGE_VERSION: latest
 
     steps:
     - name: Checkout repository
