@@ -16,11 +16,11 @@ jobs:
       matrix:
         include:
           - image_name: library/sonarqube
-            image_version: lts-community
-          - image_name: sonarsource/sonar-scanner-cli
-            image_version: latest
-          - image_name: library/postgres
-            image_version: "15"
+            image_version: community
+          # - image_name: sonarsource/sonar-scanner-cli
+          #   image_version: latest
+          # - image_name: library/postgres
+          #   image_version: "15"
 
     steps:
     - name: Checkout repository
