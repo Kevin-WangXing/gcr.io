@@ -15,8 +15,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - image_name: library/sonarqube
-            image_version: community
+          - image_name: rachelos/we-mp-rss
+            image_version: latest
           # - image_name: sonarsource/sonar-scanner-cli
           #   image_version: latest
           # - image_name: library/postgres
